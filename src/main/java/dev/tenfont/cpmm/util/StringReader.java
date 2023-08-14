@@ -16,17 +16,21 @@ public class StringReader implements Cloneable {
         this.cursor = 0;
     }
 
-    public String finish() {
+    public String readRemaining() {
         String remaining = string.substring(cursor);
         cursor = string.length();
         return remaining;
     }
 
-    public String readUntil(Predicate<Character> predicate) {
+    public String peakRemaining() {
+        return string.substring(cursor);
+    }
+
+    public String readUntil(Predicate<StringReader> predicate) {
         if (isEndOfFile())
             return "";
         StringBuilder builder = new StringBuilder();
-        while (!this.isEndOfFile() && !predicate.test(this.peekChar()))
+        while (!this.isEndOfFile() && !predicate.test(this))
             builder.append(this.readChar());
         return builder.toString();
     }
@@ -56,6 +60,10 @@ public class StringReader implements Cloneable {
             return false;
         String read = this.readString(match.length());
         return ignoreCase ? match.equalsIgnoreCase(read) : match.equals(read);
+    }
+
+    public boolean isNext(String string) {
+        return this.string.substring(this.cursor).startsWith(string);
     }
 
     public boolean canRead(int amount) {
