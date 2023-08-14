@@ -20,7 +20,7 @@ public class LexicalAnalyzer {
             System.exit(-1);
         }
 
-        int start = reader.getCursor();
+        int start = reader.getCursor(), prevLine = line, prevChar = character;
         for (TokenType type : TokenType.values()) {
             StringReader readerClone = reader.clone();
             Object value = type.getFunction().apply(readerClone);
@@ -37,8 +37,8 @@ public class LexicalAnalyzer {
                     type,
                     value,
                     reader.getString().substring(start, reader.getCursor()),
-                    line,
-                    character
+                    prevLine,
+                    prevChar
             );
         }
         Error.log("Invalid syntax", line, character);
