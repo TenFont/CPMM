@@ -2,7 +2,7 @@ package dev.tenfont.cpmm.lexer;
 
 import java.util.Arrays;
 
-public record Token(TokenType type, Object value, String raw, int start, int end) {
+public record Token(TokenType type, Object value, String raw, int line, int character) {
     public <T> T value(Class<T> expectedType) {
         return expectedType.cast(value);
     }
@@ -14,6 +14,6 @@ public record Token(TokenType type, Object value, String raw, int start, int end
     @Override
     public String toString() {
         return "Token[type=" + type + (value == null ? "" : ", value=" + value) +
-                ", start=" + start + ", end=" + end + ']';
+                ", line=" + line + ", character=" + character + ']';
     }
 }
