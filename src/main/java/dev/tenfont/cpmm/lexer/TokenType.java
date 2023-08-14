@@ -34,8 +34,4 @@ public enum TokenType {
         this.significant = significant;
         this.function = function;
     }
-
-    public boolean isSignificant() {
-        return significant;
-    }
 }
