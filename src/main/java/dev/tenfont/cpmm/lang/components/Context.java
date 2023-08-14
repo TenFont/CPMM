@@ -1,4 +1,4 @@
-package dev.tenfont.cpmm.lang;
+package dev.tenfont.cpmm.lang.components;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package dev.tenfont.cpmm.lang;
+package dev.tenfont.cpmm.lang.components;
 
 public interface Statement extends SyntaxElement {
 

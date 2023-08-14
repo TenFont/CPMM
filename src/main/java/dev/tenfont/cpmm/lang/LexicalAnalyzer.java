@@ -1,5 +1,7 @@
-package dev.tenfont.cpmm.lexer;
+package dev.tenfont.cpmm.lang;
 
+import dev.tenfont.cpmm.lang.components.Token;
+import dev.tenfont.cpmm.lang.components.TokenType;
 import dev.tenfont.cpmm.util.Error;
 import dev.tenfont.cpmm.util.StringReader;
 import lombok.Getter;

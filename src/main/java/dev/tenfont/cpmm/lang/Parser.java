@@ -1,4 +1,4 @@
-package dev.tenfont.cpmm.parser;
+package dev.tenfont.cpmm.lang;
 
 public class Parser {
     // TODO everything

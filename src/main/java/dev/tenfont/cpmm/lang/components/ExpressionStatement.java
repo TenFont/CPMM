@@ -1,4 +1,4 @@
-package dev.tenfont.cpmm.lang;
+package dev.tenfont.cpmm.lang.components;
 
 public abstract class ExpressionStatement<T> implements Expression<T> {
 

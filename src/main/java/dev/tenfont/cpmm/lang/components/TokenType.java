@@ -1,4 +1,4 @@
-package dev.tenfont.cpmm.lexer;
+package dev.tenfont.cpmm.lang.components;
 
 import dev.tenfont.cpmm.util.StringReader;
 import lombok.Getter;
