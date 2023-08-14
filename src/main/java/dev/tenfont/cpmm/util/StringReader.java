@@ -59,7 +59,7 @@ public class StringReader implements Cloneable {
     }
 
     public boolean canRead(int amount) {
-        return this.cursor + amount < string.length();
+        return this.cursor + amount <= string.length();
     }
 
     public boolean isEndOfFile() {
