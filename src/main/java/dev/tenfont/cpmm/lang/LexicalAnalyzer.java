@@ -25,7 +25,7 @@ public class LexicalAnalyzer {
         int start = reader.getCursor(), prevLine = line, prevChar = character;
         for (TokenType type : TokenType.values()) {
             StringReader readerClone = reader.clone();
-            Object value = type.getFunction().  apply(readerClone);
+            Object value = type.getFunction().apply(readerClone);
             if (value == null) continue;
             reader.setCursor(readerClone.getCursor());
             if (type == TokenType.NEW_LINE) {
