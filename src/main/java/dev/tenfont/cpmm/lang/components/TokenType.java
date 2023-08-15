@@ -71,8 +71,10 @@ public enum TokenType {
                 reader.setCursor(reader.getCursor() + 1);
                 continue;
             }
-            if (peek == '"')
+            if (peek == '"') {
+                reader.read("\"");
                 break;
+            }
             builder.append(reader.readChar());
         }
         return builder.toString();
