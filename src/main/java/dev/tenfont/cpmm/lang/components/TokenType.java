@@ -24,7 +24,7 @@ public enum TokenType {
     ARITHMETIC_OPERATOR(true, reader -> {
         switch (reader.peekChar()) {
             case '+', '-', '/', '%' -> {
-                return  reader.readChar() + "";
+                return String.valueOf(reader.readChar());
             }
             case '*' -> {
                 reader.readChar();
