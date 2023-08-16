@@ -5,6 +5,7 @@ import dev.tenfont.cpmm.lang.components.TokenType;
 import dev.tenfont.cpmm.util.Error;
 import dev.tenfont.cpmm.util.StringReader;
 import lombok.Getter;
+import org.jetbrains.annotations.Nullable;
 
 @Getter
 public class LexicalAnalyzer {
@@ -16,13 +17,12 @@ public class LexicalAnalyzer {
         this.reader = new StringReader(string);
     }
 
-    public Token getNextToken() {
+    public @Nullable Token getNextToken() {
         if (!hasNextToken()) {
-            Error.log("Unexpected end of input", line, character);
-            System.exit(-1);
+            return (lookAhead = null);
         }
 
-        int start = reader.getCursor(), prevLine = line, prevChar = character;
+        int start = reader.getCursor();
         for (TokenType type : TokenType.values()) {
             StringReader readerClone = reader.clone();
             Object value = type.getFunction().apply(readerClone);
@@ -31,15 +31,15 @@ public class LexicalAnalyzer {
             if (type == TokenType.NEW_LINE) {
                 line += 1;
                 character = 0;
-                continue;
             }
+            int prevChar = character;
             character += reader.getCursor() - start;
-            if (!type.isSignificant()) continue;
+            if (!type.isSignificant()) return getNextToken();
             return lookAhead = new Token(
                     type,
                     value,
                     reader.getString().substring(start, reader.getCursor()),
-                    prevLine,
+                    line,
                     prevChar
             );
         }

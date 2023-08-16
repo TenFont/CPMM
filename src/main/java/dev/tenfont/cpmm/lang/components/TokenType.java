@@ -9,7 +9,8 @@ import java.util.function.Function;
 public enum TokenType {
     // WHITESPACE
     NEW_LINE(false, '\n'),
-    WHITESPACE(false, ' '),
+    SPACE(false, ' '),
+    TAB(false, '\t'),
 
     // KEYWORDS
 
@@ -111,7 +112,7 @@ public enum TokenType {
     private final Function<StringReader, Object> function;
 
     TokenType(boolean significant, char c) {
-        this(significant, reader -> reader.isEndOfFile() ? null : reader.readChar() == c ? c : null);
+        this(significant, reader -> reader.readChar() == c ? c : null);
     }
 
     TokenType(boolean significant, String s) {
