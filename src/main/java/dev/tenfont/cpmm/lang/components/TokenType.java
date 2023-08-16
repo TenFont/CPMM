@@ -19,6 +19,7 @@ public enum TokenType {
     RETURN(true, "return"),
     FUTURE(true, "future"),
     PAST(true, "past"),
+    REVERSE(true, "reverse"),
 
     // OPERATORS
 

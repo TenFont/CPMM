@@ -1,7 +1,5 @@
 package dev.tenfont.cpmm.lang.components;
 
-public interface Statement extends SyntaxElement {
-
-    void execute(Context context);
-
+public abstract class Statement extends SyntaxElement {
+    public abstract void execute(Context context);
 }

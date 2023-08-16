@@ -1,7 +1,7 @@
 package dev.tenfont.cpmm.lang.components;
 
-public interface SyntaxElement {
+import dev.tenfont.cpmm.lang.Parser;
 
-    boolean init(Context context);
-
+public abstract class SyntaxElement {
+    public abstract boolean init(Parser parser, Context context);
 }
