@@ -85,7 +85,7 @@ public enum TokenType {
     END_STATEMENT(true, "\uD83D\uDC4D"),
     COMMENT(false, reader -> {
         String s = reader.readUntil(c -> c == '\n');
-        return s.endsWith(":(") ? s : null;
+        return s.endsWith("\uD83D\uDC4E") ? s : null;
     }),
     LEFT_PAREN(true, '('),
     RIGHT_PAREN(true, ')'),
