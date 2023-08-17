@@ -22,7 +22,6 @@ public enum TokenType {
     REVERSE(true, "reverse"),
 
     // OPERATORS
-
     ARITHMETIC_OPERATOR(true, reader -> {
         switch (reader.peekChar()) {
             case '+', '-', '/', '%' -> {
@@ -83,16 +82,7 @@ public enum TokenType {
     }),
 
     // IDENTIFIERS
-
-    END_STATEMENT(true, reader -> {
-        if (!reader.canRead(2))
-            return null;
-        return switch (reader.readString(2)) {
-            case ":)", "(:" -> 1;
-            case ":D", "C:" -> 2;
-            default -> null;
-        };
-    }),
+    END_STATEMENT(true, "\uD83D\uDC4D"),
     COMMENT(false, reader -> {
         String s = reader.readUntil(c -> c == '\n');
         return s.endsWith(":(") ? s : null;
