@@ -12,36 +12,21 @@ public enum TokenType {
     SPACE(false, ' '),
     TAB(false, '\t'),
 
-    // KEYWORDS
-
-    IF(true, "if"),
-    ELSE(true, "else"),
-    RETURN(true, "return"),
-    FUTURE(true, "future"),
-    PAST(true, "past"),
-    REVERSE(true, "reverse"),
-
-    // OPERATORS
-    ARITHMETIC_OPERATOR(true, reader -> {
-        switch (reader.peekChar()) {
-            case '+', '-', '/', '%' -> {
-                return String.valueOf(reader.readChar());
-            }
-            case '*' -> {
-                reader.readChar();
-                if (reader.canRead(1) && reader.peekChar() == '*') {
-                    reader.readChar();
-                    return "**";
-                }
-                return "*";
-            }
-        }
-        return null;
+    // SYMBOLS
+    END_STATEMENT(true, "\uD83D\uDC4D"),
+    COMMENT(false, reader -> {
+        String s = reader.readUntil(c -> c == '\n');
+        return s.endsWith("\uD83D\uDC4E") ? s : null;
     }),
-    COMPARISON_OPERATOR(true, reader -> switch (reader.peekChar()) {
-        case '>', '<' -> reader.readChar();
-        default -> null;
-    }),
+    LEFT_PAREN(true, '('),
+    RIGHT_PAREN(true, ')'),
+    LEFT_BRACKET(true, '['),
+    RIGHT_BRACKET(true, ']'),
+    LEFT_CURLY_BRACKET(true, '{'),
+    RIGHT_CURLY_BRACKET(true, '}'),
+    PERIOD(true, '.'),
+    COMMA(true, ','),
+    COLON(true, ':'),
 
     // LITERALS
     BOOLEAN(true, reader -> reader.read("true") ? Boolean.TRUE : reader.read("false") ? Boolean.FALSE : null),
@@ -81,21 +66,37 @@ public enum TokenType {
         return builder.toString();
     }),
 
-    // IDENTIFIERS
-    END_STATEMENT(true, "\uD83D\uDC4D"),
-    COMMENT(false, reader -> {
-        String s = reader.readUntil(c -> c == '\n');
-        return s.endsWith("\uD83D\uDC4E") ? s : null;
+    // KEYWORDS
+    IF(true, "if"),
+    ELSE(true, "else"),
+    RETURN(true, "return"),
+    FUTURE(true, "future"),
+    PAST(true, "past"),
+    REVERSE(true, "reverse"),
+
+    // OPERATORS
+    ARITHMETIC_OPERATOR(true, reader -> {
+        switch (reader.peekChar()) {
+            case '+', '-', '/', '%' -> {
+                return String.valueOf(reader.readChar());
+            }
+            case '*' -> {
+                reader.readChar();
+                if (reader.canRead(1) && reader.peekChar() == '*') {
+                    reader.readChar();
+                    return "**";
+                }
+                return "*";
+            }
+        }
+        return null;
     }),
-    LEFT_PAREN(true, '('),
-    RIGHT_PAREN(true, ')'),
-    LEFT_BRACKET(true, '['),
-    RIGHT_BRACKET(true, ']'),
-    LEFT_CURLY_BRACKET(true, '{'),
-    RIGHT_CURLY_BRACKET(true, '}'),
-    PERIOD(true, '.'),
-    COMMA(true, ','),
-    COLON(true, ':')
+    COMPARISON_OPERATOR(true, reader -> switch (reader.peekChar()) {
+        case '>', '<' -> reader.readChar();
+        default -> null;
+    }),
+
+    // IDENTIFIERS
 
     ;
 
