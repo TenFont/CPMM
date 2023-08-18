@@ -2,6 +2,7 @@ package dev.tenfont.cpmm.lang;
 
 import dev.tenfont.cpmm.elements.expressions.StringLiteralExpression;
 import dev.tenfont.cpmm.elements.statements.ExpressionStatement;
+import dev.tenfont.cpmm.elements.statements.FunctionDeclarationStatement;
 import dev.tenfont.cpmm.elements.statements.ReverseStatement;
 import dev.tenfont.cpmm.lang.components.*;
 import dev.tenfont.cpmm.util.Error;
@@ -47,6 +48,7 @@ public class Parser {
         Token lookAhead = lexer.getLookAhead();
         Statement statement = switch (lookAhead.type()) {
             case REVERSE -> new ReverseStatement();
+            case FUNCTION -> new FunctionDeclarationStatement();
             default -> new ExpressionStatement();
         };
         if (statement.init(this, context)) {

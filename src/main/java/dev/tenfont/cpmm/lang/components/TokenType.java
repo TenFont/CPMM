@@ -1,5 +1,6 @@
 package dev.tenfont.cpmm.lang.components;
 
+import dev.tenfont.cpmm.util.FunctionKeywords;
 import dev.tenfont.cpmm.util.StringReader;
 import lombok.Getter;
 
@@ -7,6 +8,7 @@ import java.util.function.Function;
 
 @Getter
 public enum TokenType {
+
     // WHITESPACE
     NEW_LINE(false, '\n'),
     SPACE(false, ' '),
@@ -94,6 +96,13 @@ public enum TokenType {
     COMPARISON_OPERATOR(true, reader -> switch (reader.peekChar()) {
         case '>', '<' -> reader.readChar();
         default -> null;
+    }),
+
+    // FUNCTION
+    FUNCTION(true, reader -> {
+        String string = reader.readUntil(c -> c == ' ');
+        if (!FunctionKeywords.getKeywords().contains(string)) return null;
+        return string;
     }),
 
     // IDENTIFIERS
