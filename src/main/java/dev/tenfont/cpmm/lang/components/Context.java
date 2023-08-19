@@ -1,5 +1,7 @@
 package dev.tenfont.cpmm.lang.components;
 
+import dev.tenfont.cpmm.lang.variables.Variable;
+import dev.tenfont.cpmm.lang.variables.VariableMap;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.Nullable;
@@ -9,13 +11,23 @@ public class Context {
 
     // TODO include optional script object, variable map and function registry
     private final @Nullable Context parentContext;
+    private final VariableMap variableMap;
 
     public Context() {
-        this(null);
+        this(new VariableMap());
+    }
+
+    public Context(VariableMap variableMap) {
+        this.parentContext = null;
+        this.variableMap = variableMap;
+    }
+
+    public VariableMap getVariableMap() {
+        return variableMap;
     }
 
     public Context enterScope() {
-        return new Context(this);
+        return new Context(variableMap);
     }
 
     public Context exitScope() {

@@ -1,6 +1,7 @@
 package dev.tenfont.cpmm;
 
 import dev.tenfont.cpmm.lang.Interpreter;
+import dev.tenfont.cpmm.lang.LexicalAnalyzer;
 import dev.tenfont.cpmm.lang.Parser;
 import dev.tenfont.cpmm.lang.components.Statement;
 
