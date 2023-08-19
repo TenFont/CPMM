@@ -17,38 +17,39 @@ public class Main {
                     "Arguments: <parse/execute> <filePath>");
             System.exit(-1);
         }
-        File file = new File(args[1]);
-        if (!file.exists()) {
-            System.err.println("That file does not exist.");
-            System.exit(-1);
-        }
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(file));
             switch (args[0]) {
                 case "parse" -> {
+                    File file = new File(args[1]);
+                    if (!file.exists()) {
+                        System.err.println("That file does not exist.");
+                        System.exit(-1);
+                    }
                     if (!file.getName().endsWith(".cpmm")) {
                         System.err.println("Only .cpmm files can be parsed.");
                         System.exit(-1);
                     }
+                    BufferedReader reader = new BufferedReader(new FileReader(file));
                     Parser parser = new Parser(reader.lines().collect(Collectors.joining("\n")));
                     long start = System.currentTimeMillis();
                     LinkedList<Statement> statements = parser.parse();
                     long end = System.currentTimeMillis();
                     System.out.println("Successfully parsed in " + (end - start) + "ms");
-                    ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(file.getName().replaceFirst("\\.[^.]+$", "") + ".mmpc"));
+                    ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(file.getName().replaceFirst("\\.[^.]+$", "") + ".\uD83D\uDC4D"));
                     outputStream.writeObject(statements);
                 }
                 case "execute" -> {
-                    if (!file.getName().endsWith(".mmpc")) {
-                        System.err.println("Only parsed cpmm (.mmpc) files can be executed.");
+                    File file = new File(args[1] + ".\uD83D\uDC4D");
+                    if (!file.exists()) {
+                        System.err.println("The file specified does not exist.");
                         System.exit(-1);
                     }
                     ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(file));
                     LinkedList<Statement> statements = (LinkedList<Statement>) inputStream.readObject();
                     new Interpreter(statements).execute();
                 }
-                default -> System.err.println("No goal was provided.\n" +
-                        "\"Arguments: <parse/run> <filePath>\"");
+                default -> System.err.println("Invalid goal '" + args[0] + "'\n" +
+                        "\"Arguments: <parse/execute> <filePath>\"");
             }
         } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
