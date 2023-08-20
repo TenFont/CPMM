@@ -27,7 +27,7 @@ public class Context {
     }
 
     public Context enterScope() {
-        return new Context(variableMap);
+        return new Context(this, variableMap);
     }
 
     public Context exitScope() {

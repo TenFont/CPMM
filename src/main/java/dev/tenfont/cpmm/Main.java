@@ -1,7 +1,6 @@
 package dev.tenfont.cpmm;
 
 import dev.tenfont.cpmm.lang.Interpreter;
-import dev.tenfont.cpmm.lang.LexicalAnalyzer;
 import dev.tenfont.cpmm.lang.Parser;
 import dev.tenfont.cpmm.lang.components.Statement;
 
@@ -12,7 +11,8 @@ import java.util.stream.Collectors;
 public class Main {
     @SuppressWarnings("unchecked")
     public static void main(String[] args) {
-        if (args.length < 2) {
+
+       if (args.length < 2) {
             System.err.println("Please provide a goal and file to run as the arguments.\n" +
                     "Arguments: <parse/execute> <filePath>");
             System.exit(-1);

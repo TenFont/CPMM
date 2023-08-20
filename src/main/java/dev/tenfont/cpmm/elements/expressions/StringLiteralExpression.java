@@ -6,7 +6,7 @@ import dev.tenfont.cpmm.lang.components.Expression;
 import dev.tenfont.cpmm.lang.components.TokenType;
 import org.jetbrains.annotations.Nullable;
 
-public class    StringLiteralExpression extends Expression<String> {
+public class StringLiteralExpression extends Expression<String> {
     private String value;
 
     @Override
