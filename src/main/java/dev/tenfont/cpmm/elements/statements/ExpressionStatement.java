@@ -19,7 +19,7 @@ public class ExpressionStatement extends Statement {
 
     @Override
     public boolean init(Parser parser, Context context) {
-        expression = parser.parseExpression(context);
+        expression = parser.parseExpression(context, Object.class);
         return true;
     }
 

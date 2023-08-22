@@ -57,19 +57,26 @@ public class Parser {
         }
     }
 
-    public Expression<?> parseExpression(Context context) {
+    public Expression<?> parseExpression(Context context, Class<?> expectedType) {
         Token lookAhead = lexer.getLookAhead();
-        Expression<?> expression = switch (lookAhead.type()) {
-            case STRING -> new StringLiteralExpression();
-            default -> null;
-        };
+        Expression<?> expression = parsePrimaryExpression();
         if (expression == null) {
             Error.log("Invalid syntax", lookAhead.line(), lookAhead.character());
+        } else if (!expectedType.isAssignableFrom(expression.getReturnType())) {
+            Error.log("Invalid expression type '" + expression.getReturnType().getSimpleName() + "', expected '" + expectedType.getSimpleName() + "' instead.", lookAhead.line(), lookAhead.character());
         } else if (expression.init(this, context)) {
             return expression;
         }
         lexer.getNextToken();
         return null;
+    }
+
+    public Expression<?> parsePrimaryExpression() {
+        Token lookAhead = lexer.getLookAhead();
+        return switch (lookAhead.type()) {
+            case STRING -> new StringLiteralExpression();
+            default -> null;
+        };
     }
 
     public <T> T eat(TokenType expectedType, Class<T> returnType) {
