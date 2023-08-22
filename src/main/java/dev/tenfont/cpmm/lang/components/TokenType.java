@@ -1,9 +1,11 @@
 package dev.tenfont.cpmm.lang.components;
 
+import dev.tenfont.cpmm.util.CardUtils;
 import dev.tenfont.cpmm.util.FunctionKeywords;
 import dev.tenfont.cpmm.util.StringReader;
 import lombok.Getter;
 
+import java.util.List;
 import java.util.function.Function;
 
 @Getter
@@ -31,6 +33,17 @@ public enum TokenType {
     COLON(true, ':'),
 
     // LITERALS
+    CARD(true, reader -> {
+        if (!reader.canRead(2))
+            return null;
+        String s = reader.readString(1);
+        char c = reader.readChar();
+        if (CardUtils.isCard(s) && CardUtils.isSuit(c))
+            return s+c;
+        else if (CardUtils.isCard(s+c) && reader.canRead(1) && CardUtils.isSuit(reader.peekChar()))
+            return s + c + reader.readChar();
+        return null;
+    }),
     BOOLEAN(true, reader -> reader.read("true") ? Boolean.TRUE : reader.read("false") ? Boolean.FALSE : null),
     NUMBER(true, reader -> {
         String number = reader.readUntil(c -> Character.digit(c, 10) == -1 && c != '-' && c != '.');
