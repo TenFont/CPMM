@@ -5,7 +5,6 @@ import dev.tenfont.cpmm.util.FunctionKeywords;
 import dev.tenfont.cpmm.util.StringReader;
 import lombok.Getter;
 
-import java.util.List;
 import java.util.function.Function;
 
 @Getter
@@ -82,6 +81,7 @@ public enum TokenType {
     }),
 
     // KEYWORDS
+    VARIABLE_DECLARATION(true, "var"),
     IF(true, "if"),
     ELSE(true, "else"),
     RETURN(true, "return"),
@@ -90,6 +90,7 @@ public enum TokenType {
     REVERSE(true, "reverse"),
 
     // OPERATORS
+    ASSIGNMENT_OPERATOR(true, '='),
     ARITHMETIC_OPERATOR(true, reader -> {
         switch (reader.peekChar()) {
             case '+', '-', '/', '%' -> {
