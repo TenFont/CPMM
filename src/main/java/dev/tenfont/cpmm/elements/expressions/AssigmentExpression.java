@@ -1,24 +1,21 @@
 package dev.tenfont.cpmm.elements.expressions;
 
-import dev.tenfont.cpmm.lang.Identifier;
 import dev.tenfont.cpmm.lang.Parser;
-import dev.tenfont.cpmm.lang.components.Context;
-import dev.tenfont.cpmm.lang.components.Expression;
-import dev.tenfont.cpmm.lang.components.TokenType;
+import dev.tenfont.cpmm.lang.components.*;
 import dev.tenfont.cpmm.util.Error;
 
-public class AssigmentExpression extends Expression<Object> {
+public class AssigmentExpression extends BinaryExpression<Object> {
+    private String identifier;
+    private Expression<?> value;
 
-    private final Identifier identifier;
-    private Object value;
-
-    public AssigmentExpression(Identifier identifier) {
-        this.identifier = identifier;
+    public AssigmentExpression(Expression<?> left) {
+        super(left);
     }
 
     @Override
     public Object get(Context context) {
-        context.getVariableMap().setVariable(identifier.get(), value);
+        var value = this.value.get(context);
+        context.getVariableMap().setVariable(identifier, value);
         return value;
     }
 
@@ -29,13 +26,30 @@ public class AssigmentExpression extends Expression<Object> {
 
     @Override
     public boolean init(Parser parser, Context context) {
-        if (!context.getVariableMap().variableExists(identifier.get())) {
+        // SYNTAX LOGIC
+        var left = getLeft();
+        parser.eat(TokenType.ASSIGNMENT_OPERATOR);
+        var right = parser.parseExpression(context, Object.class);
+
+        // Identify which expression (left / right) is the identifier
+        if (left instanceof IdentifierExpression) {
+            this.identifier = ((IdentifierExpression) left).getIdentifier();
+            this.value = right;
+        } else if (right instanceof IdentifierExpression) {
+            this.identifier = ((IdentifierExpression) right).getIdentifier();
+            this.value = left;
+        } else {
             var lexer = parser.getLexer();
-            Error.log("Invalid syntax (?) Variable " + identifier.get() + " is assigned but never declared. ", lexer.getLine(), lexer.getCharacter());
+            Error.log("Non-variable expression cannot be assigned to non-variable expression.", lexer.getLine(), lexer.getCharacter());
             return false;
         }
-        parser.eat(TokenType.ASSIGNMENT_OPERATOR);
-        value = parser.parseExpression(context, Object.class);
+
+        // Make sure the identifier is already declared as a variable
+        if (!context.getVariableMap().variableExists(identifier)) {
+            var lexer = parser.getLexer();
+            Error.log("Variable " + identifier + " is assigned but never declared. ", lexer.getLine(), lexer.getCharacter());
+            return false;
+        }
         return true;
     }
 }

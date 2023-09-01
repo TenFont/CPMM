@@ -10,10 +10,9 @@ public class ExpressionStatement extends Statement {
 
     @Override
     public void execute(Context context) {
-        if (expression.getReturnType().isAssignableFrom(String.class)) {
-            System.out.println(expression.get(context));
-        } else {
-            expression.get(context);
+        var value = expression.get(context);
+        if (value instanceof String) {
+            System.out.println(value);
         }
     }
 

@@ -1,6 +1,5 @@
 package dev.tenfont.cpmm.lang.components;
 
-import dev.tenfont.cpmm.util.CardUtils;
 import dev.tenfont.cpmm.util.FunctionKeywords;
 import dev.tenfont.cpmm.util.StringReader;
 import lombok.Getter;
@@ -32,17 +31,6 @@ public enum TokenType {
     COLON(true, ':'),
 
     // LITERALS
-    CARD(true, reader -> {
-        if (!reader.canRead(2))
-            return null;
-        String s = reader.readString(1);
-        char c = reader.readChar();
-        if (CardUtils.isCard(s) && CardUtils.isSuit(c))
-            return s+c;
-        else if (CardUtils.isCard(s+c) && reader.canRead(1) && CardUtils.isSuit(reader.peekChar()))
-            return s + c + reader.readChar();
-        return null;
-    }),
     BOOLEAN(true, reader -> reader.read("true") ? Boolean.TRUE : reader.read("false") ? Boolean.FALSE : null),
     NUMBER(true, reader -> {
         String number = reader.readUntil(c -> Character.digit(c, 10) == -1 && c != '-' && c != '.');
@@ -91,25 +79,20 @@ public enum TokenType {
 
     // OPERATORS
     ASSIGNMENT_OPERATOR(true, '='),
-    ARITHMETIC_OPERATOR(true, reader -> {
-        switch (reader.peekChar()) {
-            case '+', '-', '/', '%' -> {
-                return String.valueOf(reader.readChar());
-            }
-            case '*' -> {
-                reader.readChar();
-                if (reader.canRead(1) && reader.peekChar() == '*') {
-                    reader.readChar();
-                    return "**";
-                }
-                return "*";
-            }
-        }
-        return null;
+    ADDITIVE_OPERATOR(true, reader -> {
+        char operator = reader.readChar();
+        return switch (operator) {
+            case '+', '-' -> operator;
+            default -> null;
+        };
     }),
-    COMPARISON_OPERATOR(true, reader -> switch (reader.peekChar()) {
-        case '>', '<' -> reader.readChar();
-        default -> null;
+    COMPARISON_OPERATOR(true, reader -> {
+        char operator = reader.readChar();
+        if (operator != '>' && operator != '<') return null;
+        if (reader.canRead(1) && reader.peekChar() == '=') {
+            return operator + reader.readChar();
+        }
+        return String.valueOf(operator);
     }),
 
     // FUNCTION
@@ -120,6 +103,7 @@ public enum TokenType {
     }),
 
     // IDENTIFIERS
+    IDENTIFIER(true, reader -> reader.readUntil(c -> c == ' ')),
 
     ;
 

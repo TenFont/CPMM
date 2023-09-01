@@ -1,6 +1,6 @@
 package dev.tenfont.cpmm.lang.components;
 
-import dev.tenfont.cpmm.lang.variables.VariableMap;
+import dev.tenfont.cpmm.lang.VariableMap;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.Nullable;

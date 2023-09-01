@@ -13,6 +13,18 @@ public class LexicalAnalyzer {
     private int line = 1, character = 0;
     private Token lookAhead;
 
+    public Token getLookAhead() {
+        if (!hasLookAhead()) {
+            Error.log("No more tokens: Unexpected end of input.", line, character);
+            System.exit(-1);
+        }
+        return lookAhead;
+    }
+
+    public boolean hasLookAhead() {
+        return lookAhead != null;
+    }
+
     public LexicalAnalyzer(String string) {
         this.reader = new StringReader(string);
     }

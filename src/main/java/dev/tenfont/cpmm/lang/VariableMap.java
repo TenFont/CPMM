@@ -1,8 +1,7 @@
-package dev.tenfont.cpmm.lang.variables;
+package dev.tenfont.cpmm.lang;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import dev.tenfont.cpmm.lang.Identifier;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
@@ -11,7 +10,6 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Getter
 public class VariableMap {
-
     @Nullable
     private final VariableMap parentMap;
     private final Map<String, VariableInfo> map = new HashMap<>();
@@ -20,11 +18,11 @@ public class VariableMap {
         this(null);
     }
 
-    public VariableInfo declareVariable(Identifier identifier) {
-        if (map.containsKey(identifier.get()))
+    public VariableInfo declareVariable(String identifier) {
+        if (map.containsKey(identifier))
             return null;
         VariableInfo info = new VariableInfo(null, null);
-        map.put(identifier.get(), info);
+        map.put(identifier, info);
         return info;
     }
 
@@ -44,18 +42,13 @@ public class VariableMap {
         map.clear();
     }
 
-    public @Nullable <T> T getVariable(String identifier, Class<? extends T>[] returnTypes) {
-        return getVariable(identifier, returnTypes, false);
+    public @Nullable Object getVariable(String identifier) {
+        return getVariable(identifier, false);
     }
 
-    public @Nullable <T> T getVariable(String identifier, Class<? extends T>[] returnTypes, boolean previous) {
+    public @Nullable Object getVariable(String identifier, boolean previous) {
         VariableInfo info = getVariableInfo(identifier);
-        Object value = previous ? info.previous.value : info.value;
-        for (Class<? extends T> type : returnTypes) {
-            if (type.isInstance(value))
-                return type.cast(value);
-        }
-        return null;
+        return previous ? info.previous.value : info.value;
     }
 
     public VariableInfo getVariableInfo(String identifier)   {

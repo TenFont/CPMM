@@ -1,9 +1,13 @@
 package dev.tenfont.cpmm.lang;
 
+import dev.tenfont.cpmm.elements.expressions.AdditiveExpression;
+import dev.tenfont.cpmm.elements.expressions.AssigmentExpression;
+import dev.tenfont.cpmm.elements.expressions.IdentifierExpression;
 import dev.tenfont.cpmm.elements.expressions.StringLiteralExpression;
 import dev.tenfont.cpmm.elements.statements.ExpressionStatement;
 import dev.tenfont.cpmm.elements.statements.FunctionDeclarationStatement;
 import dev.tenfont.cpmm.elements.statements.ReverseStatement;
+import dev.tenfont.cpmm.elements.statements.VariableDeclarationStatement;
 import dev.tenfont.cpmm.lang.components.*;
 import dev.tenfont.cpmm.util.Error;
 import lombok.AccessLevel;
@@ -41,7 +45,7 @@ public class Parser {
     public void parseStatementList(Context context, TokenType stopLookAhead) {
         do {
             parseStatement(context);
-        } while (lexer.getLookAhead() != null && !lexer.getLookAhead().isType(stopLookAhead));
+        } while (lexer.hasLookAhead() && !lexer.getLookAhead().isType(stopLookAhead));
     }
 
     public void parseStatement(Context context) {
@@ -49,6 +53,7 @@ public class Parser {
         Statement statement = switch (lookAhead.type()) {
             case REVERSE -> new ReverseStatement();
             case FUNCTION -> new FunctionDeclarationStatement();
+            case VARIABLE_DECLARATION -> new VariableDeclarationStatement();
             default -> new ExpressionStatement();
         };
         if (statement.init(this, context)) {
@@ -58,25 +63,43 @@ public class Parser {
     }
 
     public Expression<?> parseExpression(Context context, Class<?> expectedType) {
+        return parseBinaryExpression(context, expectedType);
+    }
+
+    public Expression<?> parseBinaryExpression(Context context, Class<?> expectedType) {
+        Expression<?> left = parsePrimaryExpression(context, expectedType);
         Token lookAhead = lexer.getLookAhead();
-        Expression<?> expression = parsePrimaryExpression();
+        Expression<?> expression;
+        switch (lookAhead.type()) {
+            case ASSIGNMENT_OPERATOR -> expression = new AssigmentExpression(left);
+            case ADDITIVE_OPERATOR -> expression = new AdditiveExpression(left);
+            default -> {
+                return left;
+            }
+        }
+        if (!expectedType.isAssignableFrom(expression.getReturnType())) {
+            Error.log("Invalid expression type '" + expression.getReturnType().getSimpleName() + "', expected '" + expectedType.getSimpleName() + "' instead.", lookAhead.line(), lookAhead.character());
+        } else if (expression.init(this, context)) {
+            return expression;
+        }
+        return expression;
+    }
+
+    public Expression<?> parsePrimaryExpression(Context context, Class<?> expectedType) {
+        Token lookAhead = lexer.getLookAhead();
+        Expression<?> expression = switch (lookAhead.type()) {
+            case STRING -> new StringLiteralExpression();
+            case IDENTIFIER -> new IdentifierExpression();
+            default -> null;
+        };
         if (expression == null) {
-            Error.log("Invalid syntax", lookAhead.line(), lookAhead.character());
+            Error.log("Invalid expression.", lookAhead.line(), lookAhead.character());
         } else if (!expectedType.isAssignableFrom(expression.getReturnType())) {
             Error.log("Invalid expression type '" + expression.getReturnType().getSimpleName() + "', expected '" + expectedType.getSimpleName() + "' instead.", lookAhead.line(), lookAhead.character());
         } else if (expression.init(this, context)) {
             return expression;
         }
-        lexer.getNextToken();
-        return null;
-    }
-
-    public Expression<?> parsePrimaryExpression() {
-        Token lookAhead = lexer.getLookAhead();
-        return switch (lookAhead.type()) {
-            case STRING -> new StringLiteralExpression();
-            default -> null;
-        };
+        return expression;
     }
 
     public <T> T eat(TokenType expectedType, Class<T> returnType) {
