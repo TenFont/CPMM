@@ -47,7 +47,7 @@ public class AssigmentExpression extends BinaryExpression<Object> {
         // Make sure the identifier is already declared as a variable
         if (!context.getVariableMap().variableExists(identifier)) {
             var lexer = parser.getLexer();
-            Error.log("Variable " + identifier + " is assigned but never declared. ", lexer.getLine(), lexer.getCharacter());
+            Error.log("Variable " + identifier + " is assigned but never declared.", lexer.getLine(), lexer.getCharacter());
             return false;
         }
         return true;
