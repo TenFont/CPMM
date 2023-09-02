@@ -3,6 +3,7 @@ package dev.tenfont.cpmm.lang;
 import dev.tenfont.cpmm.elements.expressions.binaryexpressions.AdditiveExpression;
 import dev.tenfont.cpmm.elements.expressions.binaryexpressions.AssigmentExpression;
 import dev.tenfont.cpmm.elements.expressions.literals.IdentifierExpression;
+import dev.tenfont.cpmm.elements.expressions.literals.NumberLiteralExpression;
 import dev.tenfont.cpmm.elements.expressions.literals.StringLiteralExpression;
 import dev.tenfont.cpmm.elements.statements.ExpressionStatement;
 import dev.tenfont.cpmm.elements.statements.FunctionDeclarationStatement;
@@ -89,6 +90,7 @@ public class Parser {
         Token lookAhead = lexer.getLookAhead();
         Expression<?> expression = switch (lookAhead.type()) {
             case STRING -> new StringLiteralExpression();
+            case NUMBER -> new NumberLiteralExpression();
             case IDENTIFIER -> new IdentifierExpression();
             default -> null;
         };

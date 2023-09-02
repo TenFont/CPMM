@@ -35,9 +35,7 @@ public enum TokenType {
     NUMBER(true, reader -> {
         String number = reader.readUntil(c -> Character.digit(c, 10) == -1 && c != '-' && c != '.');
         try {
-            if (number.contains("."))
-                return Double.parseDouble(number);
-            return Long.parseLong(number);
+            return Double.parseDouble(number);
         } catch (NumberFormatException e) {
             return null;
         }
