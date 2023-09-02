@@ -1,34 +1,77 @@
 package dev.tenfont.cpmm.util;
 
-import com.google.gson.Gson;
 import lombok.Getter;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.stream.Collectors;
 
-@SuppressWarnings("unchecked")
 public class FunctionKeywords {
     @Getter
-    private static final HashSet<String> keywords;
+    private static final HashSet<String> keywords = new HashSet<>();
 
     static {
-        try {
-            URL url = new URL("https://api.api-ninjas.com/v1/thesaurus?word=fun");
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestProperty("accept", "application/json");
-            InputStream responseStream = connection.getInputStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(responseStream));
-            keywords = new HashSet<>((Collection<String>) new Gson().fromJson(reader.lines().collect(Collectors.joining()), HashMap.class).get("synonyms"));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        keywords.add("function");
+        keywords.add("fun");
+        keywords.add("define");
+        keywords.add("def");
+        keywords.add("pleasure");
+        keywords.add("entertainment");
+        keywords.add("enjoyment");
+        keywords.add("amusement");
+        keywords.add("excitement");
+        keywords.add("gratification");
+        keywords.add("jollification");
+        keywords.add("merrymaking");
+        keywords.add("leisure");
+        keywords.add("relaxation");
+        keywords.add("relief");
+        keywords.add("respite");
+        keywords.add("rest");
+        keywords.add("refreshment");
+        keywords.add("recreation");
+        keywords.add("diversion");
+        keywords.add("distraction");
+        keywords.add("good_time");
+        keywords.add("great_time");
+        keywords.add("R_and_R_(rest_and_recreation)");
+        keywords.add("living_it_up");
+        keywords.add("junketing");
+        keywords.add("a_ball");
+        keywords.add("whoopee");
+        keywords.add("beer_and_skittles");
+        keywords.add("merriment");
+        keywords.add("cheerfulness");
+        keywords.add("cheeriness");
+        keywords.add("cheer");
+        keywords.add("joy");
+        keywords.add("jollity");
+        keywords.add("joviality");
+        keywords.add("jocularity");
+        keywords.add("high_spirits");
+        keywords.add("gaiety");
+        keywords.add("mirth");
+        keywords.add("mirthfulness");
+        keywords.add("laughter");
+        keywords.add("hilarity");
+        keywords.add("glee");
+        keywords.add("gladness");
+        keywords.add("light-heartedness");
+        keywords.add("levity");
+        keywords.add("vivacity");
+        keywords.add("liveliness");
+        keywords.add("exuberance");
+        keywords.add("ebullience");
+        keywords.add("buoyancy");
+        keywords.add("perkiness");
+        keywords.add("zest");
+        keywords.add("sunniness");
+        keywords.add("brightness");
+        keywords.add("enthusiasm");
+        keywords.add("vibrancy");
+        keywords.add("vividness");
+        keywords.add("vitality");
+        keywords.add("energy");
+        keywords.add("vigour");
+        keywords.add("vim");
+        keywords.add("sport");
     }
 }
