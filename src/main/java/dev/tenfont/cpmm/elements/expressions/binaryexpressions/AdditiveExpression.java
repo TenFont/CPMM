@@ -1,5 +1,6 @@
-package dev.tenfont.cpmm.elements.expressions;
+package dev.tenfont.cpmm.elements.expressions.binaryexpressions;
 
+import dev.tenfont.cpmm.elements.expressions.literals.StringLiteralExpression;
 import dev.tenfont.cpmm.lang.Parser;
 import dev.tenfont.cpmm.lang.components.BinaryExpression;
 import dev.tenfont.cpmm.lang.components.Context;

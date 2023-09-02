@@ -1,9 +1,9 @@
 package dev.tenfont.cpmm.lang;
 
-import dev.tenfont.cpmm.elements.expressions.AdditiveExpression;
-import dev.tenfont.cpmm.elements.expressions.AssigmentExpression;
-import dev.tenfont.cpmm.elements.expressions.IdentifierExpression;
-import dev.tenfont.cpmm.elements.expressions.StringLiteralExpression;
+import dev.tenfont.cpmm.elements.expressions.binaryexpressions.AdditiveExpression;
+import dev.tenfont.cpmm.elements.expressions.binaryexpressions.AssigmentExpression;
+import dev.tenfont.cpmm.elements.expressions.literals.IdentifierExpression;
+import dev.tenfont.cpmm.elements.expressions.literals.StringLiteralExpression;
 import dev.tenfont.cpmm.elements.statements.ExpressionStatement;
 import dev.tenfont.cpmm.elements.statements.FunctionDeclarationStatement;
 import dev.tenfont.cpmm.elements.statements.ReverseStatement;
