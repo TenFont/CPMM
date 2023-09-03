@@ -1,11 +1,11 @@
 package dev.tenfont.cpmm.elements.expressions.binaryexpressions;
 
-import dev.tenfont.cpmm.elements.expressions.literals.StringLiteralExpression;
 import dev.tenfont.cpmm.lang.Parser;
 import dev.tenfont.cpmm.lang.components.BinaryExpression;
 import dev.tenfont.cpmm.lang.components.Context;
 import dev.tenfont.cpmm.lang.components.Expression;
 import dev.tenfont.cpmm.lang.components.TokenType;
+import dev.tenfont.cpmm.util.TypeUtils;
 import org.jetbrains.annotations.Nullable;
 
 public class AdditiveExpression extends BinaryExpression<Object> {
@@ -19,14 +19,9 @@ public class AdditiveExpression extends BinaryExpression<Object> {
     public @Nullable Object get(Context context) {
         Object leftValue = getLeft().get(context);
         Object rightValue = right.get(context);
-        if (getLeft() instanceof StringLiteralExpression) {
-            String left = (String) leftValue;
-            return left + rightValue;
-        }
-        if (!(leftValue instanceof Double) || !(rightValue instanceof Double)) {
-            return null;
-        }
-        return (Double) leftValue + (Double) rightValue;
+        if (leftValue instanceof String || rightValue instanceof String)
+            return TypeUtils.toString(leftValue) + TypeUtils.toString(rightValue);
+        return TypeUtils.toDouble(leftValue) + TypeUtils.toDouble(rightValue);
     }
 
     @Override
