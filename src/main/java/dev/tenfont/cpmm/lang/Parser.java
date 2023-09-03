@@ -2,25 +2,22 @@ package dev.tenfont.cpmm.lang;
 
 import dev.tenfont.cpmm.elements.expressions.binaryexpressions.AdditiveExpression;
 import dev.tenfont.cpmm.elements.expressions.binaryexpressions.AssigmentExpression;
+import dev.tenfont.cpmm.elements.expressions.literals.BooleanLiteralExpression;
 import dev.tenfont.cpmm.elements.expressions.literals.IdentifierExpression;
 import dev.tenfont.cpmm.elements.expressions.literals.NumberLiteralExpression;
 import dev.tenfont.cpmm.elements.expressions.literals.StringLiteralExpression;
-import dev.tenfont.cpmm.elements.statements.ExpressionStatement;
-import dev.tenfont.cpmm.elements.statements.FunctionDeclarationStatement;
-import dev.tenfont.cpmm.elements.statements.ReverseStatement;
-import dev.tenfont.cpmm.elements.statements.VariableDeclarationStatement;
+import dev.tenfont.cpmm.elements.statements.*;
 import dev.tenfont.cpmm.lang.components.*;
 import dev.tenfont.cpmm.util.Error;
-import lombok.AccessLevel;
 import lombok.Getter;
 
 import java.util.LinkedList;
+import java.util.List;
 
 @Getter
 public class Parser {
     private final LexicalAnalyzer lexer;
     private final String string;
-    @Getter(AccessLevel.NONE)
     private final LinkedList<Statement> statementList = new LinkedList<>();
 
     public Parser(String string) {
@@ -51,16 +48,32 @@ public class Parser {
 
     public void parseStatement(Context context) {
         Token lookAhead = lexer.getLookAhead();
-        Statement statement = switch (lookAhead.type()) {
-            case REVERSE -> new ReverseStatement();
-            case FUNCTION -> new FunctionDeclarationStatement();
-            case VARIABLE_DECLARATION -> new VariableDeclarationStatement();
-            default -> new ExpressionStatement();
-        };
+        final Statement statement;
+        switch (lookAhead.type()) {
+            case LEFT_CURLY_BRACKET -> {
+                parseBlockStatement(context);
+                return;
+            }
+            case REVERSE -> statement = new ReverseStatement();
+            case FUNCTION -> statement = new FunctionDeclarationStatement();
+            case VARIABLE_DECLARATION -> statement = new VariableDeclarationStatement();
+            default -> statement = new ExpressionStatement();
+        }
         if (statement.init(this, context)) {
             eat(TokenType.END_STATEMENT);
-            statementList.add(statement);
+            if (lexer.hasLookAhead() && lexer.getLookAhead().isType(TokenType.END_STATEMENT)) {
+                eat(TokenType.END_STATEMENT);
+                new Interpreter(new LinkedList<>(List.of(statement))).execute();
+            } else statementList.add(statement);
         }
+    }
+
+    public void parseBlockStatement(Context context) {
+        statementList.add(new EnterScopeStatement());
+        eat(TokenType.LEFT_CURLY_BRACKET);
+        parseStatementList(context.enterScope(), TokenType.RIGHT_CURLY_BRACKET);
+        eat(TokenType.RIGHT_CURLY_BRACKET);
+        statementList.add(new ExitScopeStatement());
     }
 
     public Expression<?> parseExpression(Context context, Class<?> expectedType) {
@@ -91,6 +104,7 @@ public class Parser {
         Expression<?> expression = switch (lookAhead.type()) {
             case STRING -> new StringLiteralExpression();
             case NUMBER -> new NumberLiteralExpression();
+            case BOOLEAN -> new BooleanLiteralExpression();
             case IDENTIFIER -> new IdentifierExpression();
             default -> null;
         };
