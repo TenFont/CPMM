@@ -1,5 +1,7 @@
 package dev.tenfont.cpmm.lang;
 
+import dev.tenfont.cpmm.elements.statements.EnterScopeStatement;
+import dev.tenfont.cpmm.elements.statements.ExitScopeStatement;
 import dev.tenfont.cpmm.elements.statements.ReverseStatement;
 import dev.tenfont.cpmm.lang.components.Context;
 import dev.tenfont.cpmm.lang.components.Statement;
@@ -21,6 +23,10 @@ public class Interpreter {
                 reversed = !reversed;
                 if (reversed) index-=2;
                 else index+=2;
+            } else if (statement instanceof EnterScopeStatement) {
+                context = context.enterScope();
+            } else if (statement instanceof ExitScopeStatement) {
+                context = context.exitScope();
             }
             else statement.execute(context);
         }
