@@ -31,11 +31,11 @@ public class VariableMap {
     }
 
     public boolean variableExists(String identifier) {
-        return (parentMap != null ? map.containsKey(identifier) && parentMap.variableExists(identifier) : map.containsKey(identifier));
+        return (parentMap != null ? map.containsKey(identifier) || parentMap.variableExists(identifier) : map.containsKey(identifier));
     }
 
     public boolean variableExists(VariableInfo info) {
-        return (parentMap != null ? map.containsValue(info) && parentMap.variableExists(info) : map.containsValue(info));
+        return (parentMap != null ? map.containsValue(info) || parentMap.variableExists(info) : map.containsValue(info));
     }
 
     public void clear() {
@@ -52,7 +52,8 @@ public class VariableMap {
     }
 
     public VariableInfo getVariableInfo(String identifier)   {
-        return map.get(identifier);
+        var value = map.get(identifier);
+        return ((value == null && parentMap != null) ? parentMap.getVariableInfo(identifier) : value);
     }
 
     public void setVariable(String identifier, Object value) {

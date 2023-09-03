@@ -2,12 +2,15 @@ package dev.tenfont.cpmm.lang.components;
 
 import dev.tenfont.cpmm.lang.VariableMap;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.Nullable;
 
-@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-public class Context {
+import java.util.function.Function;
 
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+@Getter
+public class Context {
     // TODO include optional script object, variable map and function registry
     private final @Nullable Context parentContext;
     private final VariableMap variableMap;
@@ -21,12 +24,8 @@ public class Context {
         this.variableMap = variableMap;
     }
 
-    public VariableMap getVariableMap() {
-        return variableMap;
-    }
-
     public Context enterScope() {
-        return new Context(this, variableMap);
+        return new Context(this, new VariableMap(variableMap));
     }
 
     public Context exitScope() {
@@ -39,4 +38,7 @@ public class Context {
         return parentContext == null;
     }
 
+    public void registerFunction(String name, Function<Object[], Void> body) {
+
+    }
 }
