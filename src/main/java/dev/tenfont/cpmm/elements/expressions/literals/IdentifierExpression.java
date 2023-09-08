@@ -10,12 +10,16 @@ import org.jetbrains.annotations.Nullable;
 
 @Getter
 public class IdentifierExpression extends Expression<Object> {
+    // Store the line and character in case the statement is preloaded & value is null
+    private int line, character;
     private String identifier;
 
     @Override
     public @Nullable Object get(Context context) {
-        if (!context.getVariableMap().variableExists(identifier))
+        if (!context.getVariableMap().variableExists(identifier)) {
+            Error.log("Variable accession is preloaded but declaration is not.", line, character);
             return null;
+        }
         return context.getVariableMap().getVariable(identifier);
     }
 
@@ -26,7 +30,10 @@ public class IdentifierExpression extends Expression<Object> {
 
     @Override
     public boolean init(Parser parser, Context context) {
-        identifier = parser.eat(TokenType.IDENTIFIER, String.class);
+        var token = parser.eat(TokenType.IDENTIFIER);
+        line = token.line();
+        character = token.character();
+        identifier = (String) token.value();
         if (!context.getVariableMap().variableExists(identifier)) {
             var lexer = parser.getLexer();
             Error.log("Variable " + identifier + " is never declared.", lexer.getLine(), lexer.getCharacter());
