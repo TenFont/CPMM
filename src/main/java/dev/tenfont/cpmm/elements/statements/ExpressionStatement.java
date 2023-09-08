@@ -1,5 +1,6 @@
 package dev.tenfont.cpmm.elements.statements;
 
+import dev.tenfont.cpmm.lang.Interpreter;
 import dev.tenfont.cpmm.lang.Parser;
 import dev.tenfont.cpmm.lang.components.Context;
 import dev.tenfont.cpmm.lang.components.Expression;
@@ -11,8 +12,8 @@ public class ExpressionStatement extends Statement {
     private Expression<?> expression;
 
     @Override
-    public void execute(Context context) {
-        var value = expression.get(context);
+    public void execute(Interpreter interpreter) {
+        var value = expression.get(interpreter.getCurrentContext());
         if (print) {
             System.out.println(value);
         }
@@ -22,6 +23,7 @@ public class ExpressionStatement extends Statement {
     public boolean init(Parser parser, Context context) {
         print = parser.getLexer().getLookAhead().isType(TokenType.STRING);
         expression = parser.parseExpression(context, Object.class);
+        parser.eat(TokenType.END_STATEMENT);
         return true;
     }
 
