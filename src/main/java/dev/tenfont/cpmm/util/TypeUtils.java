@@ -14,7 +14,7 @@ public class TypeUtils {
     public static String toString(Object object) {
         if (object instanceof Double)
             return decimalFormat.format(object);
-        return object.toString();
+        return String.valueOf(object);
     }
 
     public static Double toDouble(Object object) {
