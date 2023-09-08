@@ -1,5 +1,6 @@
 package dev.tenfont.cpmm.elements.statements;
 
+import dev.tenfont.cpmm.lang.Interpreter;
 import dev.tenfont.cpmm.lang.Parser;
 import dev.tenfont.cpmm.lang.components.*;
 import dev.tenfont.cpmm.lang.VariableMap;
@@ -10,11 +11,11 @@ public class VariableDeclarationStatement extends Statement {
     private Expression<?> value;
 
     @Override
-    public void execute(Context context) {
-        VariableMap map = context.getVariableMap();
+    public void execute(Interpreter interpreter) {
+        VariableMap map = interpreter.getCurrentContext().getVariableMap();
         map.declareVariable(identifier);
         if (value != null)
-            map.setVariable(identifier, value.get(context));
+            map.setVariable(identifier, value.get(interpreter.getCurrentContext()));
     }
 
     @Override
@@ -31,6 +32,7 @@ public class VariableDeclarationStatement extends Statement {
             parser.eat(TokenType.ASSIGNMENT_OPERATOR);
             value = parser.parseExpression(context, Object.class);
         }
+        parser.eat(TokenType.END_STATEMENT);
         return true;
     }
 }
