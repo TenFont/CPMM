@@ -57,7 +57,10 @@ public class VariableMap {
     }
 
     public void setVariable(String identifier, Object value) {
-        map.compute(identifier, (s, info) -> new VariableInfo(info, value));
+        if (map.containsKey(identifier))
+            map.compute(identifier, (s, info) -> new VariableInfo(info, value));
+        else if (parentMap != null)
+            parentMap.setVariable(identifier, value);
     }
 
     private Map<String, VariableInfo> collectMaps() {
