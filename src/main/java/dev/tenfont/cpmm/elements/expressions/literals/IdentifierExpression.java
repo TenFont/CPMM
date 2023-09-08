@@ -14,6 +14,8 @@ public class IdentifierExpression extends Expression<Object> {
 
     @Override
     public @Nullable Object get(Context context) {
+        if (!context.getVariableMap().variableExists(identifier))
+            return null;
         return context.getVariableMap().getVariable(identifier);
     }
 
