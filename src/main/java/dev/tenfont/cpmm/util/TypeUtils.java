@@ -17,7 +17,7 @@ public class TypeUtils {
         return String.valueOf(object);
     }
 
-    public static Double toDouble(Object object) {
+    public static double toDouble(Object object) {
         if (object instanceof Double)
             return (Double) object;
         else if (object instanceof String)
@@ -25,5 +25,14 @@ public class TypeUtils {
         else if (object instanceof Boolean)
             return ((boolean) object) ? 1d : 0d;
         return 0d;
+    }
+
+    public static boolean toBoolean(Object object) {
+        if (object instanceof Boolean)
+            return (Boolean) object;
+        else if (object instanceof Double)
+            return (double) object != 0;
+        else
+            return false;
     }
 }

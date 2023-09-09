@@ -1,7 +1,6 @@
 package dev.tenfont.cpmm.lang;
 
-import dev.tenfont.cpmm.elements.expressions.binaryexpressions.AdditiveExpression;
-import dev.tenfont.cpmm.elements.expressions.binaryexpressions.AssigmentExpression;
+import dev.tenfont.cpmm.elements.expressions.binaryexpressions.*;
 import dev.tenfont.cpmm.elements.expressions.literals.BooleanLiteralExpression;
 import dev.tenfont.cpmm.elements.expressions.literals.IdentifierExpression;
 import dev.tenfont.cpmm.elements.expressions.literals.NumberLiteralExpression;
@@ -83,7 +82,10 @@ public class Parser {
         Expression expression;
         switch (lookAhead.type()) {
             case ASSIGNMENT_OPERATOR -> expression = new AssigmentExpression(left);
+            case EQUALITY_OPERATOR -> expression = new EqualityExpression(left);
+            case RELATIONAL_OPERATOR -> expression = new RelationalExpression(left);
             case ADDITIVE_OPERATOR -> expression = new AdditiveExpression(left);
+            case MULTIPLICATIVE_OPERATOR -> expression = new MultiplicativeExpression(left);
             default -> {
                 return left;
             }

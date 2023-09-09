@@ -85,7 +85,6 @@ public enum TokenType {
     REVERSE(true, "reverse"),
 
     // OPERATORS
-    ASSIGNMENT_OPERATOR(true, '='),
     ADDITIVE_OPERATOR(true, reader -> {
         char operator = reader.readChar();
         return switch (operator) {
@@ -93,7 +92,14 @@ public enum TokenType {
             default -> null;
         };
     }),
-    COMPARISON_OPERATOR(true, reader -> {
+    MULTIPLICATIVE_OPERATOR(true, reader -> {
+        char operator = reader.readChar();
+        return switch (operator) {
+            case '*', '/' -> operator;
+            default -> null;
+        };
+    }),
+    RELATIONAL_OPERATOR(true, reader -> {
         char operator = reader.readChar();
         if (operator != '>' && operator != '<') return null;
         if (reader.canRead(1) && reader.peekChar() == '=') {
@@ -101,6 +107,8 @@ public enum TokenType {
         }
         return String.valueOf(operator);
     }),
+    EQUALITY_OPERATOR(true, "=="),
+    ASSIGNMENT_OPERATOR(true, '='),
 
     // FUNCTION
     FUNCTION(true, reader -> {
