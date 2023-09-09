@@ -5,11 +5,11 @@ import dev.tenfont.cpmm.lang.Parser;
 import dev.tenfont.cpmm.lang.components.*;
 import dev.tenfont.cpmm.util.Error;
 
-public class AssigmentExpression extends BinaryExpression<Object> {
+public class AssigmentExpression extends BinaryExpression {
     private String identifier;
-    private Expression<?> value;
+    private Expression value;
 
-    public AssigmentExpression(Expression<?> left) {
+    public AssigmentExpression(Expression left) {
         super(left);
     }
 
@@ -21,16 +21,11 @@ public class AssigmentExpression extends BinaryExpression<Object> {
     }
 
     @Override
-    public Class<Object> getReturnType() {
-        return Object.class;
-    }
-
-    @Override
     public boolean init(Parser parser, Context context) {
         // SYNTAX LOGIC
         var left = getLeft();
         parser.eat(TokenType.ASSIGNMENT_OPERATOR);
-        var right = parser.parseExpression(context, Object.class);
+        var right = parser.parseExpression(context);
 
         // Identify which expression (left / right) is the identifier
         if (left instanceof IdentifierExpression) {

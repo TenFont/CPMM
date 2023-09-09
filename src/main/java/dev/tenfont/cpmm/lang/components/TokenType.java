@@ -31,7 +31,16 @@ public enum TokenType {
     COLON(true, ':'),
 
     // LITERALS
-    BOOLEAN(true, reader -> reader.read("true") ? Boolean.TRUE : reader.read("false") ? Boolean.FALSE : null),
+    BOOLEAN(true, reader -> {
+        if (reader.isNext("true")) {
+            reader.readString(4);
+            return true;
+        } else if (reader.isNext("false")) {
+            reader.readString(5);
+            return false;
+        }
+        return null;
+    }),
     NUMBER(true, reader -> {
         String number = reader.readUntil(c -> Character.digit(c, 10) == -1 && c != '-' && c != '.');
         try {
@@ -101,7 +110,10 @@ public enum TokenType {
     }),
 
     // IDENTIFIERS
-    IDENTIFIER(true, reader -> reader.readUntil(c -> c == ' ')),
+    IDENTIFIER(true, reader -> {
+        if (!Character.isJavaIdentifierStart(reader.peekChar())) return null;
+        return reader.readUntil(c -> !Character.isJavaIdentifierPart(c));
+    }),
 
     ;
 

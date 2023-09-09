@@ -15,7 +15,6 @@ public class FunctionDeclarationStatement extends Statement {
     @Override
     public boolean init(Parser parser, Context context) {
         parser.eat(TokenType.FUNCTION);
-        parser.eat(TokenType.END_STATEMENT);
         return true;
     }
 }

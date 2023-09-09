@@ -8,10 +8,10 @@ import dev.tenfont.cpmm.lang.components.TokenType;
 import dev.tenfont.cpmm.util.TypeUtils;
 import org.jetbrains.annotations.Nullable;
 
-public class AdditiveExpression extends BinaryExpression<Object> {
-    private Expression<?> right;
+public class AdditiveExpression extends BinaryExpression {
+    private Expression right;
 
-    public AdditiveExpression(Expression<?> left) {
+    public AdditiveExpression(Expression left) {
         super(left);
     }
 
@@ -25,14 +25,9 @@ public class AdditiveExpression extends BinaryExpression<Object> {
     }
 
     @Override
-    public Class<?> getReturnType() {
-        return Object.class;
-    }
-
-    @Override
     public boolean init(Parser parser, Context context) {
         parser.eat(TokenType.ADDITIVE_OPERATOR);
-        right = parser.parseExpression(context, Object.class);
+        right = parser.parseExpression(context);
         return true;
     }
 }

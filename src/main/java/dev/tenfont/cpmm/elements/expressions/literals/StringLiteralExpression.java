@@ -6,17 +6,12 @@ import dev.tenfont.cpmm.lang.components.Expression;
 import dev.tenfont.cpmm.lang.components.TokenType;
 import org.jetbrains.annotations.Nullable;
 
-public class StringLiteralExpression extends Expression<String> {
+public class StringLiteralExpression extends Expression {
     private String value;
 
     @Override
     public @Nullable String get(Context context) {
         return value;
-    }
-
-    @Override
-    public Class<? extends String> getReturnType() {
-        return String.class;
     }
 
     @Override

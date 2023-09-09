@@ -23,9 +23,6 @@ public class BlockStatement extends Statement {
         statements.addAll(parser.parseStatementList(context.enterScope(), TokenType.RIGHT_CURLY_BRACKET));
         statements.add(new ExitScopeStatement());
         parser.eat(TokenType.RIGHT_CURLY_BRACKET);
-        var lexer = parser.getLexer();
-        if (lexer.hasLookAhead() && lexer.getLookAhead().isType(TokenType.END_STATEMENT))
-            parser.eat(TokenType.END_STATEMENT);
         return true;
     }
 }

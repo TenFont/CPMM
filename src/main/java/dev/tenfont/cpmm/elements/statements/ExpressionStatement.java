@@ -9,7 +9,7 @@ import dev.tenfont.cpmm.lang.components.TokenType;
 
 public class ExpressionStatement extends Statement {
     private boolean print;
-    private Expression<?> expression;
+    private Expression expression;
 
     @Override
     public void execute(Interpreter interpreter) {
@@ -22,8 +22,7 @@ public class ExpressionStatement extends Statement {
     @Override
     public boolean init(Parser parser, Context context) {
         print = parser.getLexer().getLookAhead().isType(TokenType.STRING);
-        expression = parser.parseExpression(context, Object.class);
-        parser.eat(TokenType.END_STATEMENT);
+        expression = parser.parseExpression(context);
         return true;
     }
 

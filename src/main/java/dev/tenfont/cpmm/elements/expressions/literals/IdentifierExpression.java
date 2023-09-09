@@ -9,7 +9,7 @@ import lombok.Getter;
 import org.jetbrains.annotations.Nullable;
 
 @Getter
-public class IdentifierExpression extends Expression<Object> {
+public class IdentifierExpression extends Expression {
     // Store the line and character in case the statement is preloaded & value is null
     private int line, character;
     private String identifier;
@@ -17,15 +17,10 @@ public class IdentifierExpression extends Expression<Object> {
     @Override
     public @Nullable Object get(Context context) {
         if (!context.getVariableMap().variableExists(identifier)) {
-            Error.log("Variable accession is preloaded but declaration is not.", line, character);
+            Error.log("Variable accession and declaration must be executed concurrently. One is preloaded while the other is not.", line, character);
             return null;
         }
         return context.getVariableMap().getVariable(identifier);
-    }
-
-    @Override
-    public Class<?> getReturnType() {
-        return Object.class;
     }
 
     @Override

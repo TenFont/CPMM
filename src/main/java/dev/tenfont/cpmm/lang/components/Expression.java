@@ -1,9 +1,5 @@
 package dev.tenfont.cpmm.lang.components;
 
-import org.jetbrains.annotations.Nullable;
-
-public abstract class Expression<T> extends SyntaxElement {
-    public abstract @Nullable T get(Context context);
-
-    public abstract Class<? extends T> getReturnType();
+public abstract class Expression extends SyntaxElement {
+    public abstract Object get(Context context);
 }

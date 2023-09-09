@@ -8,7 +8,7 @@ import dev.tenfont.cpmm.util.Error;
 
 public class VariableDeclarationStatement extends Statement {
     private String identifier;
-    private Expression<?> value;
+    private Expression value;
 
     @Override
     public void execute(Interpreter interpreter) {
@@ -30,9 +30,8 @@ public class VariableDeclarationStatement extends Statement {
         context.getVariableMap().declareVariable(identifier);
         if (parser.getLexer().hasLookAhead() && parser.getLexer().getLookAhead().type().equals(TokenType.ASSIGNMENT_OPERATOR)) {
             parser.eat(TokenType.ASSIGNMENT_OPERATOR);
-            value = parser.parseExpression(context, Object.class);
+            value = parser.parseExpression(context);
         }
-        parser.eat(TokenType.END_STATEMENT);
         return true;
     }
 }

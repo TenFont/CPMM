@@ -15,7 +15,6 @@ public class ReverseStatement extends Statement {
     @Override
     public boolean init(Parser parser, Context context) {
         parser.eat(TokenType.REVERSE);
-        parser.eat(TokenType.END_STATEMENT);
         return true;
     }
 }

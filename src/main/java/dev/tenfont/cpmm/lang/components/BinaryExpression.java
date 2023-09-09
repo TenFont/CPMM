@@ -6,6 +6,6 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Getter(AccessLevel.PROTECTED)
-public abstract class BinaryExpression<T> extends Expression<T> {
-    private final Expression<?> left;
+public abstract class BinaryExpression extends Expression {
+    private final Expression left;
 }

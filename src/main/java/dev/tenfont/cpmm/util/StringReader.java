@@ -63,7 +63,7 @@ public class StringReader implements Cloneable {
     }
 
     public boolean isNext(String string) {
-        return this.string.substring(this.cursor).startsWith(string);
+        return canRead(string.length()) && this.string.substring(this.cursor).startsWith(string);
     }
 
     public boolean canRead(int amount) {
