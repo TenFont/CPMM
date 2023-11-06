@@ -58,7 +58,6 @@ public class Parser {
                 return this.parseBlockStatement(context);
             }
             case REVERSE -> statement = new ReverseStatement();
-            case FUNCTION -> statement = new FunctionDeclarationStatement();
             case VARIABLE_DECLARATION -> statement = new VariableDeclarationStatement();
             default -> statement = new ExpressionStatement();
         }
@@ -121,6 +120,9 @@ public class Parser {
             switch (lexer.getLookAhead().type()) {
                 case IF -> {
                     statement = new IfStatement(block);
+                    statement.init(this, context);
+                    eat(TokenType.END_STATEMENT);
+                } case FUNCTION -> {
                     statement.init(this, context);
                     eat(TokenType.END_STATEMENT);
                 }

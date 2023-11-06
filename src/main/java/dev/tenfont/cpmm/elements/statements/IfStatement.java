@@ -6,19 +6,17 @@ import dev.tenfont.cpmm.lang.components.Context;
 import dev.tenfont.cpmm.lang.components.Expression;
 import dev.tenfont.cpmm.lang.components.Statement;
 import dev.tenfont.cpmm.lang.components.TokenType;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 public class IfStatement extends Statement {
-    private final BlockStatement blockStatement;
+    private final BlockStatement body;
     private Expression test;
-
-    public IfStatement(BlockStatement blockStatement) {
-        this.blockStatement = blockStatement;
-    }
 
     @Override
     public void execute(Interpreter interpreter) {
         var value = test.get(interpreter.getCurrentContext());
-        if (value != null && (boolean) value) blockStatement.execute(interpreter);
+        if (value != null && (boolean) value) body.execute(interpreter);
     }
 
     @Override
